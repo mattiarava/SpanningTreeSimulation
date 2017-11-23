@@ -14,112 +14,41 @@ namespace Prim
         private List<Node> graph;
         private PriorityQueue queue;
 
+        private int nodeListLength;
+
         public MainForm()
         {
             InitializeComponent();
-            CreateGraph();
-            index = 8;
-            panel1.Paint += new PaintEventHandler(panel1_Paint);
+            
         }
 
         private void CreateGraph()
         {
-            graph = new List<Node>();
-            Node a = new Node(0, 0);
-            Node b = new Node(1, Node.INFINITY);
-            Node c = new Node(2, Node.INFINITY);
-            Node d = new Node(3, Node.INFINITY);
-            Node e = new Node(4, Node.INFINITY);
-            Node f = new Node(5, Node.INFINITY);
-            Node g = new Node(6, Node.INFINITY);
-            Node h = new Node(7, Node.INFINITY);
-            Node i = new Node(8, Node.INFINITY);
-
-            List<Node> adjA = a.Adjacency;
-            List<Node> adjB = b.Adjacency;
-            List<Node> adjC = c.Adjacency;
-            List<Node> adjD = d.Adjacency;
-            List<Node> adjE = e.Adjacency;
-            List<Node> adjF = f.Adjacency;
-            List<Node> adjG = g.Adjacency;
-            List<Node> adjH = h.Adjacency;
-            List<Node> adjI = i.Adjacency;
-
-            List<int> weightA = a.Weight;
-            List<int> weightB = b.Weight;
-            List<int> weightC = c.Weight;
-            List<int> weightD = d.Weight;
-            List<int> weightE = e.Weight;
-            List<int> weightF = f.Weight;
-            List<int> weightG = g.Weight;
-            List<int> weightH = h.Weight;
-            List<int> weightI = i.Weight;
-
-            adjA.Add(b);
-            adjA.Add(h);
-            weightA.Add(4);
-            weightA.Add(8);
-            adjB.Add(a);
-            adjB.Add(c);
-            adjB.Add(h);
-            weightB.Add(4);
-            weightB.Add(8);
-            weightB.Add(11);
-            adjC.Add(b);
-            adjC.Add(d);
-            adjC.Add(f);
-            adjC.Add(i);
-            weightC.Add(8);
-            weightC.Add(7);
-            weightC.Add(4);
-            weightC.Add(2);
-            adjD.Add(c);
-            adjD.Add(e);
-            adjD.Add(f);
-            weightD.Add(7);
-            weightD.Add(9);
-            weightD.Add(14);
-            adjE.Add(d);
-            adjE.Add(f);
-            weightE.Add(9);
-            weightE.Add(10);
-            adjF.Add(c);
-            adjF.Add(d);
-            adjF.Add(e);
-            adjF.Add(g);
-            weightF.Add(4);
-            weightF.Add(14);
-            weightF.Add(10);
-            weightF.Add(2);
-            adjG.Add(f);
-            adjG.Add(h);
-            adjG.Add(i);
-            weightG.Add(2);
-            weightG.Add(1);
-            weightG.Add(6);
-            adjH.Add(a);
-            adjH.Add(b);
-            adjH.Add(g);
-            adjH.Add(i);
-            weightH.Add(8);
-            weightH.Add(11);
-            weightH.Add(1);
-            weightH.Add(7);
-            adjI.Add(c);
-            adjI.Add(g);
-            adjI.Add(h);
-            weightI.Add(2);
-            weightI.Add(6);
-            weightI.Add(7);
-            graph.Add(a);
-            graph.Add(b);
-            graph.Add(c);
-            graph.Add(d);
-            graph.Add(e);
-            graph.Add(f);
-            graph.Add(g);
-            graph.Add(h);
-            graph.Add(i);
+            this.graph = new List<Node>();
+            String[] nomi = new String[] { "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l" };
+            int indx = 0;
+            for (indx = 0; indx < this.nodeListLength; indx++)
+            {
+                graph.Add(new Node(indx, Node.INFINITY));
+            }
+            indx = 0;
+            foreach(var node in graph)
+            {
+                Random ran = new Random();
+                int nPorts = ran.Next(0, this.nodeListLength-1);
+                int adj;
+                for (int v = 0; v < nPorts; v++)
+                {
+                    adj = ran.Next(this.nodeListLength-2);
+                    while ((adj == indx))
+                    {
+                        adj = ran.Next(this.nodeListLength-2);
+                    }
+                    node.Adjacency.Add(graph[adj]);
+                    node.Weight.Add(ran.Next(12));
+                }
+                indx++;
+            }
             n = graph.Count;
             color = new Color[n];
 
@@ -129,7 +58,7 @@ namespace Prim
             u = new int[n];
             v = new int[n];
 
-            MST();
+            //MST();
         }
 
         void MST()
@@ -209,7 +138,7 @@ namespace Prim
                 int Width = panel1.Width;
                 int Height = panel1.Height;
                 Font font = new Font("Courier New", 12f, FontStyle.Bold);
-                List<Node> nodeList = queue.NodeList;
+                //List<Node> nodeList = queue.NodeList;
                 Pen pen = new Pen(Color.Black);
                 SolidBrush textBrush = new SolidBrush(Color.White);
 
@@ -266,13 +195,23 @@ namespace Prim
 
         private void button1_Click(object sender, EventArgs e)
         {
-            index++;
+            CreateGraph();
+            index = 100;
+            panel1.Paint += new PaintEventHandler(panel1_Paint);
+            //if (index < n)
+            //    panel1.Invalidate();
 
-            if (index < n)
-                panel1.Invalidate();
+            //else
+            //    index = -1;
+        }
 
-            else
-                index = -1;
+
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (comboBox1.SelectedItem != null)
+            {
+                Int32.TryParse((string)comboBox1.SelectedItem, out this.nodeListLength);
+            }
         }
     }
 }
