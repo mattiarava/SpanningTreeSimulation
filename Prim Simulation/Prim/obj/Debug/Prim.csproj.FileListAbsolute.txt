@@ -1,0 +1,26 @@
+C:\Users\Pate\Documents\Visual Studio 2008\Projects\Prim\Prim\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\Pate\Documents\Visual Studio 2008\Projects\Prim\Prim\obj\Debug\Prim.MainForm.resources
+C:\Users\Pate\Documents\Visual Studio 2008\Projects\Prim\Prim\obj\Debug\Prim.Properties.Resources.resources
+C:\Users\Pate\Documents\Visual Studio 2008\Projects\Prim\Prim\obj\Debug\Prim.csproj.GenerateResource.Cache
+C:\Users\Pate\Documents\Visual Studio 2008\Projects\Prim\Prim\bin\Debug\Prim.exe
+C:\Users\Pate\Documents\Visual Studio 2008\Projects\Prim\Prim\bin\Debug\Prim.pdb
+C:\Users\Pate\Documents\Visual Studio 2008\Projects\Prim\Prim\obj\Debug\Prim.exe
+C:\Users\Pate\Documents\Visual Studio 2008\Projects\Prim\Prim\obj\Debug\Prim.pdb
+C:\Users\mravarotto\OneDrive\Documenti\Materiale università\Reti di Telecomunicazioni\Prim Spanning Tree Algorithm\C#\Prim\bin\Debug\Prim.exe
+C:\Users\mravarotto\OneDrive\Documenti\Materiale università\Reti di Telecomunicazioni\Prim Spanning Tree Algorithm\C#\Prim\bin\Debug\Prim.pdb
+C:\Users\mravarotto\OneDrive\Documenti\Materiale università\Reti di Telecomunicazioni\Prim Spanning Tree Algorithm\C#\Prim\obj\Debug\Prim.csprojResolveAssemblyReference.cache
+C:\Users\mravarotto\OneDrive\Documenti\Materiale università\Reti di Telecomunicazioni\Prim Spanning Tree Algorithm\C#\Prim\obj\Debug\Prim.MainForm.resources
+C:\Users\mravarotto\OneDrive\Documenti\Materiale università\Reti di Telecomunicazioni\Prim Spanning Tree Algorithm\C#\Prim\obj\Debug\Prim.Properties.Resources.resources
+C:\Users\mravarotto\OneDrive\Documenti\Materiale università\Reti di Telecomunicazioni\Prim Spanning Tree Algorithm\C#\Prim\obj\Debug\Prim.csproj.GenerateResource.Cache
+C:\Users\mravarotto\OneDrive\Documenti\Materiale università\Reti di Telecomunicazioni\Prim Spanning Tree Algorithm\C#\Prim\obj\Debug\Prim.csproj.CoreCompileInputs.cache
+C:\Users\mravarotto\OneDrive\Documenti\Materiale università\Reti di Telecomunicazioni\Prim Spanning Tree Algorithm\C#\Prim\obj\Debug\Prim.exe
+C:\Users\mravarotto\OneDrive\Documenti\Materiale università\Reti di Telecomunicazioni\Prim Spanning Tree Algorithm\C#\Prim\obj\Debug\Prim.pdb
+C:\Users\Mattia Ravarotto\OneDrive\Documenti\Materiale università\Reti di Telecomunicazioni\Prim Spanning Tree Algorithm\C#\Prim\bin\Debug\Prim.exe
+C:\Users\Mattia Ravarotto\OneDrive\Documenti\Materiale università\Reti di Telecomunicazioni\Prim Spanning Tree Algorithm\C#\Prim\bin\Debug\Prim.pdb
+C:\Users\Mattia Ravarotto\OneDrive\Documenti\Materiale università\Reti di Telecomunicazioni\Prim Spanning Tree Algorithm\C#\Prim\obj\Debug\Prim.csprojResolveAssemblyReference.cache
+C:\Users\Mattia Ravarotto\OneDrive\Documenti\Materiale università\Reti di Telecomunicazioni\Prim Spanning Tree Algorithm\C#\Prim\obj\Debug\Prim.MainForm.resources
+C:\Users\Mattia Ravarotto\OneDrive\Documenti\Materiale università\Reti di Telecomunicazioni\Prim Spanning Tree Algorithm\C#\Prim\obj\Debug\Prim.Properties.Resources.resources
+C:\Users\Mattia Ravarotto\OneDrive\Documenti\Materiale università\Reti di Telecomunicazioni\Prim Spanning Tree Algorithm\C#\Prim\obj\Debug\Prim.csproj.GenerateResource.Cache
+C:\Users\Mattia Ravarotto\OneDrive\Documenti\Materiale università\Reti di Telecomunicazioni\Prim Spanning Tree Algorithm\C#\Prim\obj\Debug\Prim.csproj.CoreCompileInputs.cache
+C:\Users\Mattia Ravarotto\OneDrive\Documenti\Materiale università\Reti di Telecomunicazioni\Prim Spanning Tree Algorithm\C#\Prim\obj\Debug\Prim.exe
+C:\Users\Mattia Ravarotto\OneDrive\Documenti\Materiale università\Reti di Telecomunicazioni\Prim Spanning Tree Algorithm\C#\Prim\obj\Debug\Prim.pdb
