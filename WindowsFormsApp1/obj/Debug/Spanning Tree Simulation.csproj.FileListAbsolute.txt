@@ -1,0 +1,10 @@
+C:\Users\ravar\Documents\Visual Studio 2017\Projects\Progetto Telecomunicazioni\WindowsFormsApp1\bin\Debug\WindowsFormsApp1.exe.config
+C:\Users\ravar\Documents\Visual Studio 2017\Projects\Progetto Telecomunicazioni\WindowsFormsApp1\bin\Debug\WindowsFormsApp1.exe
+C:\Users\ravar\Documents\Visual Studio 2017\Projects\Progetto Telecomunicazioni\WindowsFormsApp1\bin\Debug\WindowsFormsApp1.pdb
+C:\Users\ravar\Documents\Visual Studio 2017\Projects\Progetto Telecomunicazioni\WindowsFormsApp1\obj\Debug\Spanning Tree Simulation.csprojResolveAssemblyReference.cache
+C:\Users\ravar\Documents\Visual Studio 2017\Projects\Progetto Telecomunicazioni\WindowsFormsApp1\obj\Debug\WindowsFormsApp1.Form1.resources
+C:\Users\ravar\Documents\Visual Studio 2017\Projects\Progetto Telecomunicazioni\WindowsFormsApp1\obj\Debug\WindowsFormsApp1.Properties.Resources.resources
+C:\Users\ravar\Documents\Visual Studio 2017\Projects\Progetto Telecomunicazioni\WindowsFormsApp1\obj\Debug\Spanning Tree Simulation.csproj.GenerateResource.Cache
+C:\Users\ravar\Documents\Visual Studio 2017\Projects\Progetto Telecomunicazioni\WindowsFormsApp1\obj\Debug\Spanning Tree Simulation.csproj.CoreCompileInputs.cache
+C:\Users\ravar\Documents\Visual Studio 2017\Projects\Progetto Telecomunicazioni\WindowsFormsApp1\obj\Debug\WindowsFormsApp1.exe
+C:\Users\ravar\Documents\Visual Studio 2017\Projects\Progetto Telecomunicazioni\WindowsFormsApp1\obj\Debug\WindowsFormsApp1.pdb
