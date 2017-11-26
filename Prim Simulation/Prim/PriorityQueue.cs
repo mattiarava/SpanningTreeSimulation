@@ -20,9 +20,7 @@ namespace Prim
         {
             heapSize = nl.Count;
             nodeList = new List<Node>();
-
-            for (int i = 0; i < nl.Count; i++)
-                nodeList.Add(nl[i]);
+            nodeList.AddRange(nl);
         }
 
         public void exchange(int i, int j)

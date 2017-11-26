@@ -19,7 +19,7 @@ namespace Prim
         public MainForm()
         {
             InitializeComponent();
-            
+
         }
 
         private void CreateGraph()
@@ -32,20 +32,45 @@ namespace Prim
                 graph.Add(new Node(indx, Node.INFINITY));
             }
             indx = 0;
-            foreach(var node in graph)
+            Random ran = new Random();
+            foreach (var node in graph)
             {
-                Random ran = new Random();
-                int nPorts = ran.Next(0, this.nodeListLength-1);
+                Shuffler shuffler = new Shuffler();
+                int nPorts = 1 + ((ran.Next(10000)) % (this.nodeListLength - 1));
                 int adj;
-                for (int v = 0; v < nPorts; v++)
+                List<int> list = new List<int>();
+                for (int v = 0; v < this.nodeListLength; v++)
                 {
-                    adj = ran.Next(this.nodeListLength-2);
-                    while ((adj == indx))
+                    list.Add(v);
+                    //ran = new Random(ran.Next(10000));
+                    //adj = ran.Next(1000)%(this.nodeListLength - 2);
+                    //while ((adj == indx))
+                    //{
+                    //    adj = ran.Next(10000)%(this.nodeListLength - 2);
+                    //}
+                    //node.Adjacency.Add(graph[adj]);
+                    //node.Weight.Add(ran.Next(12));
+                }
+                shuffler.Shuffle(list, ran);
+                for (int i = 0; i < nPorts; i++)
+                {
+                    if (list[i] == indx)
                     {
-                        adj = ran.Next(this.nodeListLength-2);
+                        if (!graph[list[nPorts]].Adjacency.Contains(node))
+                        {
+                            node.Adjacency.Add(graph[list[nPorts]]);
+                            node.Weight.Add(1 + (ran.Next(100)) % 11);
+                        }
                     }
-                    node.Adjacency.Add(graph[adj]);
-                    node.Weight.Add(ran.Next(12));
+                    else
+                    {
+                        if (!graph[list[i]].Adjacency.Contains(node))
+                        {
+                            node.Adjacency.Add(graph[list[i]]);
+                            node.Weight.Add(1 + ran.Next(100) % 12);
+                        }
+                    }
+                    node.Weight.Add((ran.Next(100)) % 12);
                 }
                 indx++;
             }
@@ -100,7 +125,7 @@ namespace Prim
             }
 
             // reorder the edges in the minimum spanning tree
-            
+
             for (int i = 0; i < n - 1; i++)
             {
                 for (int j = i + 1; j < n; j++)
@@ -133,6 +158,7 @@ namespace Prim
 
         private void draw(Graphics g)
         {
+            MST();
             if (index != -1)
             {
                 int Width = panel1.Width;
@@ -184,9 +210,80 @@ namespace Prim
             }
         }
 
-        private void panel1_Paint(object sender, PaintEventArgs pea)
+        private void panel1_Paintgraph(object sender, PaintEventArgs pea)
+        {
+            drawInitial(pea.Graphics);
+        }
+
+        private void panel1_Painttree(object sender, PaintEventArgs pea)
         {
             draw(pea.Graphics);
+        }
+
+        private void drawInitial(Graphics g)
+        {
+            int Width = panel1.Width;
+            int Height = panel1.Height;
+            Font font = new Font("Courier New", 12f, FontStyle.Bold);
+            //List<Node> nodeList = queue.NodeList;
+            Pen pen = new Pen(Color.Black);
+            SolidBrush textBrush = new SolidBrush(Color.White);
+            foreach (var node in this.graph)
+            {
+                int i = 0;
+                foreach (var adj in node.Adjacency)
+                {
+                    calculateXY(node.Id);
+                    x1 = x + (Width / 2) / n / 2;
+                    y1 = y + (Width / 2) / n / 2;
+                    calculateXY(adj.Id);
+                    x2 = x + (Width / 2) / n / 2;
+                    y2 = y + (Width / 2) / n / 2;
+                    g.DrawLine(pen, x1, y1, x2, y2);
+                    int spostamentoX = 0, spostamentoY = 0;
+                    if (x1 == x2)
+                        spostamentoY = 55;
+                    else if (y1 == y2)
+                        spostamentoX = -65;
+                    else if ((x1 + x2) / 2 == 607 && (y1 + y2) / 2 == 402)
+                    {
+                        if ((x1 > x2 && y1 > y2) || (x1 < x2 && y1 < y2))
+                        {
+                            spostamentoX = -55;
+                            spostamentoY = -55;
+                        }
+                        else
+                        {
+                            spostamentoX = -55;
+                            spostamentoY = 55;
+                        }
+                    }
+                    g.DrawString(node.Weight[i].ToString(), font, new SolidBrush(Color.BlueViolet), (x1 + spostamentoX + x2) / 2, (y1 + spostamentoY + y2) / 2);
+                    i++;
+                }
+
+                SolidBrush brush = new SolidBrush(color[u[index]]);
+
+                string str = node.Id.ToString();
+
+                calculateXY(node.Id);
+                g.FillEllipse(brush, x, y, (Width / 2) / n, (Width / 2) / n);
+                g.DrawString(str, font,
+                    textBrush, (float)(x + (Width / 2) / n / 2) - 12f,
+                    (float)(y + (Width / 2) / n / 2) - 12f);
+
+                //if (v[i] != -1)
+                //{
+                //    c = new char[1];
+                //    c[0] = (char)('a' + v[i]);
+                //    str = new string(c);
+                //    calculateXY(v[i]);
+                //    g.FillEllipse(brush, x, y, (Width / 2) / n, (Width / 2) / n);
+                //    g.DrawString(str, font,
+                //        textBrush, (float)(x + (Width / 2) / n / 2) - 12f,
+                //        (float)(y + (Width / 2) / n / 2) - 12f);
+                //}
+            }
         }
 
         private void MainForm_Load(object sender, EventArgs e)
@@ -196,8 +293,9 @@ namespace Prim
         private void button1_Click(object sender, EventArgs e)
         {
             CreateGraph();
-            index = 100;
-            panel1.Paint += new PaintEventHandler(panel1_Paint);
+            index = this.nodeListLength - 1;
+            panel1.Paint += new PaintEventHandler(panel1_Paintgraph);
+            panel1.Invalidate();
             //if (index < n)
             //    panel1.Invalidate();
 
@@ -205,6 +303,13 @@ namespace Prim
             //    index = -1;
         }
 
+        private void button2_Click(object sender, EventArgs pea)
+        {
+            index = this.nodeListLength - 1;
+            panel1.Paint -= new PaintEventHandler(panel1_Paintgraph);
+            panel1.Paint += new PaintEventHandler(panel1_Painttree);
+            panel1.Invalidate();
+        }
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {

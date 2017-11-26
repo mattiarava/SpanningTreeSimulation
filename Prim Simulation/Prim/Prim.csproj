@@ -53,6 +53,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Segment.cs" />
+    <Compile Include="Shuffler.cs" />
     <Compile Include="STPPacket.cs" />
     <Compile Include="Switch.cs" />
     <EmbeddedResource Include="MainForm.resx">
