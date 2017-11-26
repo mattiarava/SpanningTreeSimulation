@@ -15,6 +15,9 @@ public class STPPacket
     public TimeSpan MaxAge    { get; set; }
     public TimeSpan HelloTime { get; set; }
     public int ForwardDelay   { get; set; }
+    public int type           { get; set; }
+    public long macRoot       { get; set; }
+    public long macSender     { get; set; }
 }
 
 /* Queue ADT (Abstract Data Type) for a DataFrame

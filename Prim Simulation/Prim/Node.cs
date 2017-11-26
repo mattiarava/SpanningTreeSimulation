@@ -6,21 +6,28 @@ namespace Prim
     class Node
     {
         public const int INFINITY = int.MaxValue;
+        private Node node;
+
+        public Node() { }
+
+        public Node(Node node)
+        {
+            this.node = node;
+        }
 
         public Node(int id, int key)
         {
             this.Id = id;
             this.Key = key;
-            Adjacency = new List<Node>();
+            Adjacency = new Dictionary<Node, int>();
             Pi = new List<Node>();
-            Weight = new List<int>();
         }
 
         public int Id { get; set; }
         public int Key { get; set; }
-        public List<Node> Adjacency { get; set; }
+        public Dictionary<Node,int> Adjacency { get; set; }
         public List<Node> Pi { get; set; }
-        public List<int> Weight { get; set; }
+        public Boolean isRoot { get; set; }
         public void addNodeToPi(Node node)
         {
             Pi.Add(node);
@@ -30,5 +37,11 @@ namespace Prim
         {
             Pi = new List<Node>();
         }
+    }
+
+    class Edge
+    {
+        public Node Neighbour { get; set; }
+        public int Weigth { get; set; }
     }
 }
