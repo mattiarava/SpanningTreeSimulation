@@ -12,7 +12,6 @@ namespace Prim
         private int index, n, x, y, x1, x2, y1, y2;
         private Color[] color;
         private List<Node> graph;
-        private PriorityQueue queue;
 
         private int nodeListLength;
 
@@ -29,7 +28,7 @@ namespace Prim
             int indx = 0;
             for (indx = 0; indx < this.nodeListLength; indx++)
             {
-                graph.Add(new Node(indx, Node.INFINITY));
+                graph.Add(new Node(indx));
             }
             graph[0].isRoot = true;
             indx = 0;
@@ -57,16 +56,16 @@ namespace Prim
                 {
                     if (list[i] == indx)
                     {
-                        if (!graph[list[nPorts]].Adjacency.ContainsKey(node))
+                        if (!graph[list[nPorts]].Adjacency.ContainsKey(node.Id))
                         {
-                            node.Adjacency.Add(graph[list[nPorts]], 1 + (ran.Next(100)) % 9);
+                            node.Adjacency.Add(graph[list[nPorts]].Id, 1 + (ran.Next(100)) % 9);
                         }
                     }
                     else
                     {
-                        if (!graph[list[i]].Adjacency.ContainsKey(node))
+                        if (!graph[list[i]].Adjacency.ContainsKey(node.Id))
                         {
-                            node.Adjacency.Add(graph[list[i]], 1 + ran.Next(100) % 9);
+                            node.Adjacency.Add(graph[list[i]].Id, 1 + ran.Next(100) % 9);
                         }
                     }
                 }
@@ -79,93 +78,43 @@ namespace Prim
                 color[m] = Color.Blue;
         }
 
-        //void MST()
-        //{
-        //    bool[] output = new bool[n];
-        //    int[] pi = new int[n];
-        //    List<Node> copy = new List<Node>();
-
-        //    for (int i = 0; i < graph.Count; i++)
-        //        copy.Add(graph[i]);
-
-        //    queue = new PriorityQueue(copy);
-        //    queue.buildHeap();
-
-        //    for (int i = 0; i < queue.NodeList.Count; i++)
-        //    {
-        //        Node node = queue.extractMin();
-
-        //        output[node.Id] = true;
-        //        for (int j = 0; j < node.Adjacency.Count; j++)
-        //        {
-        //            Node next = node.Adjacency[j];
-        //            int weight = node.Weight[j];
-
-        //            if (!output[next.Id] && weight < next.Key)
-        //            {
-        //                pi[next.Id] = node.Id;
-        //                node.Adjacency[j].Key = weight;
-        //            }
-        //        }
-        //    }
-
-        //    pi[0] = -1;
-
-        //    for (int i = 0; i < n; i++)
-        //    {
-        //        u[i] = i;
-        //        v[i] = pi[i];
-        //    }
-
-        //    // reorder the edges in the minimum spanning tree
-
-        //    for (int i = 0; i < n - 1; i++)
-        //    {
-        //        for (int j = i + 1; j < n; j++)
-        //        {
-        //            Node nodeI = graph[u[i]];
-        //            Node nodeJ = graph[u[j]];
-
-        //            if (v[i] >= v[j] && nodeI.Key > nodeJ.Key)
-        //            {
-        //                int t = u[i];
-
-        //                u[i] = u[j];
-        //                u[j] = t;
-        //                t = v[i];
-        //                v[i] = v[j];
-        //                v[j] = t;
-        //            }
-        //        }
-        //    }
-        //}
-
         private List<Node> MST()
         {
             List<Node> spanningTree = new List<Node>();
             Node next = new Node(graph.Where(n => n.isRoot).First());
-            next.Adjacency = new Dictionary<Node, int>();
+            next.Adjacency = new Dictionary<int, int>();
             spanningTree.Add(next);
             while (spanningTree.Count < this.nodeListLength)
             {
                 int parentId = -1;
                 int minWeight = 10;
-                KeyValuePair<Node, int> minAdj = new KeyValuePair<Node, int>();
+                KeyValuePair<int, int> minAdj = new KeyValuePair<int, int>();
                 foreach (var node in spanningTree)
                 {
                     foreach (var adj in graph.Where(n => n.Id == node.Id).First().Adjacency)
                     {
-                        if (adj.Value < minWeight && !spanningTree.Select(n => n.Id).ToList().Contains(adj.Key.Id))
+                        if (adj.Value < minWeight && !spanningTree.Select(n => n.Id).ToList().Contains(adj.Key))
                         {
                             minWeight = adj.Value;
                             minAdj = adj;
                             parentId = node.Id;
                         }
                     }
+                    int tempWeight;
+                    foreach(var itm in graph.Where(n => n.Id != node.Id))
+                    {
+                        if((!spanningTree.Select(n=>n.Id).Contains(itm.Id))&&itm.Adjacency.TryGetValue(node.Id,out tempWeight))
+                            if (tempWeight < minWeight)
+                            {
+                                minWeight = tempWeight;
+                                minAdj = new KeyValuePair<int, int>(itm.Id,tempWeight);
+                                parentId = node.Id;
+                            }
+                    }
                 }
                 spanningTree.Where(n => n.Id == parentId).First().Adjacency.Add(minAdj.Key, minAdj.Value);
                 next = new Node(minAdj.Key);
-                next.Adjacency = new Dictionary<Node, int>();
+                next.Adjacency = new Dictionary<int, int>();
                 spanningTree.Add(next);
             }
             return spanningTree;
@@ -183,16 +132,17 @@ namespace Prim
         private void draw(Graphics g)
         {
             List<Node> spanningTree = MST();
-            this.drawGraph(spanningTree, g);
+            this.drawGraph(graph, g, 1);
+            this.drawGraph(spanningTree, g,2);
         }
 
-        private void drawGraph(List<Node> list, Graphics g)
+        private void drawGraph(List<Node> list, Graphics g,float width)
         {
             int Width = panel1.Width;
             int Height = panel1.Height;
             Font font = new Font("Courier New", 12f, FontStyle.Bold);
             //List<Node> nodeList = queue.NodeList;
-            Pen pen = new Pen(Color.Black);
+            Pen pen = new Pen(Color.Black,width);
             SolidBrush textBrush = new SolidBrush(Color.White);
             foreach (var node in list)
             {
@@ -202,7 +152,7 @@ namespace Prim
                     calculateXY(node.Id);
                     x1 = x + (Width / 2) / n / 2;
                     y1 = y + (Width / 2) / n / 2;
-                    calculateXY(adj.Key.Id);
+                    calculateXY(adj.Key);
                     x2 = x + (Width / 2) / n / 2;
                     y2 = y + (Width / 2) / n / 2;
                     g.DrawLine(pen, x1, y1, x2, y2);
@@ -252,7 +202,7 @@ namespace Prim
 
         private void drawInitial(Graphics g)
         {
-            this.drawGraph(graph,g);
+            this.drawGraph(graph,g,1);
                 //if (v[i] != -1)
                 //{
                 //    c = new char[1];
@@ -274,6 +224,7 @@ namespace Prim
         {
             CreateGraph();
             index = this.nodeListLength - 1;
+            panel1.Paint -= new PaintEventHandler(panel1_Painttree);
             panel1.Paint += new PaintEventHandler(panel1_Paintgraph);
             panel1.Invalidate();
             //if (index < n)

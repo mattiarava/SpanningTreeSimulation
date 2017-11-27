@@ -15,28 +15,15 @@ namespace Prim
             this.node = node;
         }
 
-        public Node(int id, int key)
+        public Node(int id)
         {
             this.Id = id;
-            this.Key = key;
-            Adjacency = new Dictionary<Node, int>();
-            Pi = new List<Node>();
+            Adjacency = new Dictionary<int, int>();
         }
 
         public int Id { get; set; }
-        public int Key { get; set; }
-        public Dictionary<Node,int> Adjacency { get; set; }
-        public List<Node> Pi { get; set; }
+        public Dictionary<int,int> Adjacency { get; set; }
         public Boolean isRoot { get; set; }
-        public void addNodeToPi(Node node)
-        {
-            Pi.Add(node);
-        }
-
-        public void clearPi()
-        {
-            Pi = new List<Node>();
-        }
     }
 
     class Edge
