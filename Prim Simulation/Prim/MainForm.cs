@@ -12,6 +12,8 @@ namespace Prim
         private int index, n, x, y, x1, x2, y1, y2;
         private Color[] color;
         private List<Node> graph;
+        private int[,] adjMatrix;
+        private int[,] SpanningTreeMatrix;
 
         private int nodeListLength;
 
@@ -24,53 +26,72 @@ namespace Prim
         private void CreateGraph()
         {
             this.graph = new List<Node>();
-            String[] nomi = new String[] { "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l" };
+            this.adjMatrix = new int[nodeListLength, nodeListLength];
             int indx = 0;
             for (indx = 0; indx < this.nodeListLength; indx++)
             {
-                graph.Add(new Node(indx));
+                graph.Add(new Node
+                {
+                    Id = indx,
+                    BridgeToRootId = indx,
+                    RootId = 0,
+                    RootPathWeight = 10
+                });
             }
-            graph[0].isRoot = true;
-            indx = 0;
+            graph[0].RootPathWeight = 0;
             Random ran = new Random();
-            foreach (var node in graph)
+            //foreach (var node in graph)
+            //{
+            //    Shuffler shuffler = new Shuffler();
+            for (int r = 0; r < this.nodeListLength; r++)
             {
-                Shuffler shuffler = new Shuffler();
-                int nPorts = 1 + ((ran.Next(10000)) % (this.nodeListLength - 1));
-                int adj;
-                List<int> list = new List<int>();
-                for (int v = 0; v < this.nodeListLength; v++)
+                for (int c = r + 1; c < this.nodeListLength; c++)
                 {
-                    list.Add(v);
-                    //ran = new Random(ran.Next(10000));
-                    //adj = ran.Next(1000)%(this.nodeListLength - 2);
-                    //while ((adj == indx))
-                    //{
-                    //    adj = ran.Next(10000)%(this.nodeListLength - 2);
-                    //}
-                    //node.Adjacency.Add(graph[adj]);
-                    //node.Weight.Add(ran.Next(12));
+                    adjMatrix[r, c] = ran.Next(100) % 9;
+                    adjMatrix[r, r] = 0;
                 }
-                shuffler.Shuffle(list, ran);
-                for (int i = 0; i < nPorts; i++)
-                {
-                    if (list[i] == indx)
-                    {
-                        if (!graph[list[nPorts]].Adjacency.ContainsKey(node.Id))
-                        {
-                            node.Adjacency.Add(graph[list[nPorts]].Id, 1 + (ran.Next(100)) % 9);
-                        }
-                    }
-                    else
-                    {
-                        if (!graph[list[i]].Adjacency.ContainsKey(node.Id))
-                        {
-                            node.Adjacency.Add(graph[list[i]].Id, 1 + ran.Next(100) % 9);
-                        }
-                    }
-                }
-                indx++;
             }
+            for (int r = 0; r < this.nodeListLength; r++)
+            {
+                for (int c = 0; c < r; c++)
+                {
+                    adjMatrix[r, c] = adjMatrix[c, r];
+                }
+            }
+            //int nPorts = 1 + ((ran.Next(10000)) % (this.nodeListLength - 1));
+            //int adj;
+            //List<int> list = new List<int>();
+            //for (int v = 0; v < this.nodeListLength; v++)
+            //{
+            //    list.Add(v);
+            //    //ran = new Random(ran.Next(10000));
+            //    //adj = ran.Next(1000)%(this.nodeListLength - 2);
+            //    //while ((adj == indx))
+            //    //{
+            //    //    adj = ran.Next(10000)%(this.nodeListLength - 2);
+            //    //}
+            //    //node.Adjacency.Add(graph[adj]);
+            //    //node.Weight.Add(ran.Next(12));
+            //}
+            //shuffler.Shuffle(list, ran);
+            //for (int i = 0; i < nPorts; i++)
+            //{
+            //    if (list[i] == indx)
+            //    {
+            //        if (!graph[list[nPorts]].Adjacency.ContainsKey(node.Id))
+            //        {
+            //            node.Adjacency.Add(graph[list[nPorts]].Id, 1 + (ran.Next(100)) % 9);
+            //        }
+            //    }
+            //    else
+            //    {
+            //        if (!graph[list[i]].Adjacency.ContainsKey(node.Id))
+            //        {
+            //            node.Adjacency.Add(graph[list[i]].Id, 1 + ran.Next(100) % 9);
+            //        }
+            //    }
+            //}
+            //}
             n = graph.Count;
             color = new Color[n];
 
@@ -78,46 +99,72 @@ namespace Prim
                 color[m] = Color.Blue;
         }
 
-        private List<Node> MST()
+        private void MST()
         {
-            List<Node> spanningTree = new List<Node>();
-            Node next = new Node(graph.Where(n => n.isRoot).First());
-            next.Adjacency = new Dictionary<int, int>();
-            spanningTree.Add(next);
-            while (spanningTree.Count < this.nodeListLength)
+            for(int r = 0; r < this.nodeListLength; r++)
             {
-                int parentId = -1;
-                int minWeight = 10;
-                KeyValuePair<int, int> minAdj = new KeyValuePair<int, int>();
-                foreach (var node in spanningTree)
+                this.graph.Where(n=>n.Id==r).First().neighbours = new List<Node>();
+                this.graph.Where(n => n.Id == r).First().Weight = new List<int>();
+                for(int c = 0; c < this.nodeListLength; c++)
                 {
-                    foreach (var adj in graph.Where(n => n.Id == node.Id).First().Adjacency)
+                    if (this.adjMatrix[r, c] > 0)
                     {
-                        if (adj.Value < minWeight && !spanningTree.Select(n => n.Id).ToList().Contains(adj.Key))
-                        {
-                            minWeight = adj.Value;
-                            minAdj = adj;
-                            parentId = node.Id;
-                        }
-                    }
-                    int tempWeight;
-                    foreach(var itm in graph.Where(n => n.Id != node.Id))
-                    {
-                        if((!spanningTree.Select(n=>n.Id).Contains(itm.Id))&&itm.Adjacency.TryGetValue(node.Id,out tempWeight))
-                            if (tempWeight < minWeight)
-                            {
-                                minWeight = tempWeight;
-                                minAdj = new KeyValuePair<int, int>(itm.Id,tempWeight);
-                                parentId = node.Id;
-                            }
+                        this.graph.Where(n => n.Id == r).First().neighbours.Add(graph.Where(n => n.Id == c).First());
+                        this.graph.Where(n => n.Id == r).First().Weight.Add(this.adjMatrix[r,c]);
                     }
                 }
-                spanningTree.Where(n => n.Id == parentId).First().Adjacency.Add(minAdj.Key, minAdj.Value);
-                next = new Node(minAdj.Key);
-                next.Adjacency = new Dictionary<int, int>();
-                spanningTree.Add(next);
             }
-            return spanningTree;
+            this.graph.Where(n => n.RootId == n.Id).First().sendBPDU();
+            this.SpanningTreeMatrix = new int[this.nodeListLength, this.nodeListLength];
+            for(int c = 0; c < this.nodeListLength; c++)
+            {
+                for(int r = 0; r < this.nodeListLength; r++)
+                {
+                    this.SpanningTreeMatrix[r, c] = 0;
+                }
+            }
+            foreach(var itm in this.graph)
+            {
+                this.SpanningTreeMatrix[itm.Id, itm.BridgeToRootId] = this.adjMatrix[itm.Id, itm.BridgeToRootId];
+                this.SpanningTreeMatrix[itm.BridgeToRootId, itm.Id] = this.adjMatrix[itm.BridgeToRootId, itm.Id];
+            }
+            //Node next = new Node(graph.Where(n => n.isRoot).First());
+            //next.Adjacency = new Dictionary<int, int>();
+            //spanningTree.Add(next);
+            //while (spanningTree.Count < this.nodeListLength)
+            //{
+            //    int parentId = -1;
+            //    int minWeight = 10;
+            //    KeyValuePair<int, int> minAdj = new KeyValuePair<int, int>();
+            //    foreach (var node in spanningTree)
+            //    {
+            //        foreach (var adj in graph.Where(n => n.Id == node.Id).First().Adjacency)
+            //        {
+            //            if (adj.Value < minWeight && !spanningTree.Select(n => n.Id).ToList().Contains(adj.Key))
+            //            {
+            //                minWeight = adj.Value;
+            //                minAdj = adj;
+            //                parentId = node.Id;
+            //            }
+            //        }
+            //        int tempWeight;
+            //        foreach (var itm in graph.Where(n => n.Id != node.Id))
+            //        {
+            //            if ((!spanningTree.Select(n => n.Id).Contains(itm.Id)) && itm.Adjacency.TryGetValue(node.Id, out tempWeight))
+            //                if (tempWeight < minWeight)
+            //                {
+            //                    minWeight = tempWeight;
+            //                    minAdj = new KeyValuePair<int, int>(itm.Id, tempWeight);
+            //                    parentId = node.Id;
+            //                }
+            //        }
+            //    }
+            //    spanningTree.Where(n => n.Id == parentId).First().Adjacency.Add(minAdj.Key, minAdj.Value);
+            //    next = new Node(minAdj.Key);
+            //    next.Adjacency = new Dictionary<int, int>();
+            //    spanningTree.Add(next);
+            //}
+            
         }
 
         private void calculateXY(int id)
@@ -131,51 +178,52 @@ namespace Prim
 
         private void draw(Graphics g)
         {
-            List<Node> spanningTree = MST();
-            this.drawGraph(graph, g, 1);
-            this.drawGraph(spanningTree, g,2);
+            MST();
+            this.drawGraph(this.adjMatrix, g, 1);
+            this.drawGraph(this.SpanningTreeMatrix, g, 2);
         }
 
-        private void drawGraph(List<Node> list, Graphics g,float width)
+        private void drawGraph(int[,] adjacencyMatrix, Graphics g, float width)
         {
             int Width = panel1.Width;
             int Height = panel1.Height;
             Font font = new Font("Courier New", 12f, FontStyle.Bold);
             //List<Node> nodeList = queue.NodeList;
-            Pen pen = new Pen(Color.Black,width);
+            Pen pen = new Pen(Color.Black, width);
             SolidBrush textBrush = new SolidBrush(Color.White);
-            foreach (var node in list)
+            foreach (var node in this.graph)
             {
-                int i = 0;
-                foreach (var adj in node.Adjacency)
+                for (int i=node.Id+1;i<nodeListLength;i++)
                 {
-                    calculateXY(node.Id);
-                    x1 = x + (Width / 2) / n / 2;
-                    y1 = y + (Width / 2) / n / 2;
-                    calculateXY(adj.Key);
-                    x2 = x + (Width / 2) / n / 2;
-                    y2 = y + (Width / 2) / n / 2;
-                    g.DrawLine(pen, x1, y1, x2, y2);
-                    int spostamentoX = 0, spostamentoY = 0;
-                    if (x1 == x2)
-                        spostamentoY = 55;
-                    else if (y1 == y2)
-                        spostamentoX = -65;
-                    else if ((x1 + x2) / 2 == 607 && (y1 + y2) / 2 == 402)
+                    if (adjacencyMatrix[node.Id, i] > 0)
                     {
-                        if ((x1 > x2 && y1 > y2) || (x1 < x2 && y1 < y2))
-                        {
-                            spostamentoX = -55;
-                            spostamentoY = -55;
-                        }
-                        else
-                        {
-                            spostamentoX = -55;
+                        calculateXY(node.Id);
+                        x1 = x + (Width / 2) / n / 2;
+                        y1 = y + (Width / 2) / n / 2;
+                        calculateXY(i);
+                        x2 = x + (Width / 2) / n / 2;
+                        y2 = y + (Width / 2) / n / 2;
+                        g.DrawLine(pen, x1, y1, x2, y2);
+                        int spostamentoX = 0, spostamentoY = 0;
+                        if (x1 == x2)
                             spostamentoY = 55;
+                        else if (y1 == y2)
+                            spostamentoX = -65;
+                        else if ((x1 + x2) / 2 == 607 && (y1 + y2) / 2 == 402)
+                        {
+                            if ((x1 > x2 && y1 > y2) || (x1 < x2 && y1 < y2))
+                            {
+                                spostamentoX = -55;
+                                spostamentoY = -55;
+                            }
+                            else
+                            {
+                                spostamentoX = -55;
+                                spostamentoY = 55;
+                            }
                         }
+                        g.DrawString(adjacencyMatrix[node.Id,0].ToString(), font, new SolidBrush(Color.BlueViolet), (x1 + spostamentoX + x2) / 2, (y1 + spostamentoY + y2) / 2);
                     }
-                    g.DrawString(adj.Value.ToString(), font, new SolidBrush(Color.BlueViolet), (x1 + spostamentoX + x2) / 2, (y1 + spostamentoY + y2) / 2);
-                    i++;
                 }
 
                 SolidBrush brush = new SolidBrush(Color.Blue);
@@ -202,18 +250,18 @@ namespace Prim
 
         private void drawInitial(Graphics g)
         {
-            this.drawGraph(graph,g,1);
-                //if (v[i] != -1)
-                //{
-                //    c = new char[1];
-                //    c[0] = (char)('a' + v[i]);
-                //    str = new string(c);
-                //    calculateXY(v[i]);
-                //    g.FillEllipse(brush, x, y, (Width / 2) / n, (Width / 2) / n);
-                //    g.DrawString(str, font,
-                //        textBrush, (float)(x + (Width / 2) / n / 2) - 12f,
-                //        (float)(y + (Width / 2) / n / 2) - 12f);
-                //}
+            this.drawGraph(this.adjMatrix, g, 1);
+            //if (v[i] != -1)
+            //{
+            //    c = new char[1];
+            //    c[0] = (char)('a' + v[i]);
+            //    str = new string(c);
+            //    calculateXY(v[i]);
+            //    g.FillEllipse(brush, x, y, (Width / 2) / n, (Width / 2) / n);
+            //    g.DrawString(str, font,
+            //        textBrush, (float)(x + (Width / 2) / n / 2) - 12f,
+            //        (float)(y + (Width / 2) / n / 2) - 12f);
+            //}
         }
 
         private void MainForm_Load(object sender, EventArgs e)
