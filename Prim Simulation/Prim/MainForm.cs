@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Prim
 {
@@ -34,15 +36,13 @@ namespace Prim
                 {
                     Id = indx,
                     BridgeToRootId = indx,
-                    RootId = 0,
-                    RootPathWeight = 10
+                    RootId = indx,
+                    RootPathWeight = 0
                 });
             }
-            graph[0].RootPathWeight = 0;
+            //graph[0].RootPathWeight = 0;
             Random ran = new Random();
-            //foreach (var node in graph)
-            //{
-            //    Shuffler shuffler = new Shuffler();
+
             for (int r = 0; r < this.nodeListLength; r++)
             {
                 for (int c = r + 1; c < this.nodeListLength; c++)
@@ -81,7 +81,16 @@ namespace Prim
                     }
                 }
             }
-            this.graph.Where(n => n.RootId == n.Id).First().sendBPDU();
+            //this.graph.Where(n => n.RootId == n.Id).First().sendBPDU();
+            Parallel.ForEach(graph,(currentNode) =>
+            {
+                currentNode.sendBPDU();
+            });
+            //foreach(var itm in graph)
+            //{
+            //    Thread thread = new Thread(itm.sendBPDU);
+            //    thread.Start();
+            //}
             this.SpanningTreeMatrix = new int[this.nodeListLength, this.nodeListLength];
             for(int c = 0; c < this.nodeListLength; c++)
             {

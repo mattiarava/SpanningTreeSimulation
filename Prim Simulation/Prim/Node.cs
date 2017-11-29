@@ -43,7 +43,14 @@ namespace Prim
         public void receiveBPDU(BPDUPacket packet)
         {
             int bridgeIndex = neighbours.Select(n => n.Id).ToList().IndexOf(packet.SenderBridgeId);
-            if (packet.RootPathCost + Weight[bridgeIndex] < this.RootPathWeight)
+            if (packet.RootBridgeId < this.RootId)
+            {
+                this.RootId = packet.RootBridgeId;
+                this.RootPathWeight = packet.RootPathCost + Weight[bridgeIndex];
+                this.BridgeToRootId = packet.SenderBridgeId;
+                sendBPDU();
+            }
+            else if (packet.RootPathCost + Weight[bridgeIndex] < this.RootPathWeight)
             {
                 this.RootPathWeight = packet.RootPathCost + Weight[bridgeIndex];
                 this.BridgeToRootId = packet.SenderBridgeId;

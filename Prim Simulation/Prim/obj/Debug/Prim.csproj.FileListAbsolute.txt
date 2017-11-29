@@ -33,3 +33,4 @@ C:\Users\Mattia Ravarotto\Documents\GitHub\SpanningTreeSimulation\Prim Simulatio
 C:\Users\Mattia Ravarotto\Documents\GitHub\SpanningTreeSimulation\Prim Simulation\Prim\obj\Debug\Prim.pdb
 C:\Users\Mattia Ravarotto\Documents\GitHub\SpanningTreeSimulation\Prim Simulation\Prim\bin\Debug\Prim.exe
 C:\Users\Mattia Ravarotto\Documents\GitHub\SpanningTreeSimulation\Prim Simulation\Prim\bin\Debug\Prim.pdb
+C:\Users\Mattia Ravarotto\Documents\GitHub\SpanningTreeSimulation\Prim Simulation\Prim\bin\Debug\Prim.exe.config
