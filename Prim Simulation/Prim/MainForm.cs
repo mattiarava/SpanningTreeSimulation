@@ -10,9 +10,7 @@ namespace Prim
 {
     public partial class MainForm : Form
     {
-        private const int PAINTED = 0, UNPAINTED = 1;
         private int index, n, x, y, x1, x2, y1, y2;
-        private Color[] color;
         private List<Node> graph;
         private int[,] adjMatrix;
         private int[,] SpanningTreeMatrix;
@@ -35,19 +33,19 @@ namespace Prim
                 graph.Add(new Node
                 {
                     Id = indx,
+                    //Inizialmente ogni Brodge crede di essere il root
                     BridgeToRootId = indx,
                     RootId = indx,
                     RootPathWeight = 0
                 });
             }
-            //graph[0].RootPathWeight = 0;
             Random ran = new Random();
 
             for (int r = 0; r < this.nodeListLength; r++)
             {
                 for (int c = r + 1; c < this.nodeListLength; c++)
                 {
-                    adjMatrix[r, c] = ran.Next(100) % 9;
+                    adjMatrix[r, c] = ran.Next(100) % 10;
                     adjMatrix[r, r] = 0;
                 }
             }
@@ -58,12 +56,8 @@ namespace Prim
                     adjMatrix[r, c] = adjMatrix[c, r];
                 }
             }
-            
-            n = graph.Count;
-            color = new Color[n];
 
-            for (int m = 0; m < n; m++)
-                color[m] = Color.Blue;
+            n = graph.Count;
         }
 
         private void MST()
@@ -81,16 +75,10 @@ namespace Prim
                     }
                 }
             }
-            //this.graph.Where(n => n.RootId == n.Id).First().sendBPDU();
             Parallel.ForEach(graph,(currentNode) =>
             {
                 currentNode.sendBPDU();
             });
-            //foreach(var itm in graph)
-            //{
-            //    Thread thread = new Thread(itm.sendBPDU);
-            //    thread.Start();
-            //}
             this.SpanningTreeMatrix = new int[this.nodeListLength, this.nodeListLength];
             for(int c = 0; c < this.nodeListLength; c++)
             {
